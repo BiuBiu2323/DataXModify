@@ -1,6 +1,7 @@
 package com.alibaba.datax.plugin.rdbms.writer;
 
 import com.alibaba.datax.common.element.Column;
+import com.alibaba.datax.common.element.LongColumn;
 import com.alibaba.datax.common.element.Record;
 import com.alibaba.datax.common.exception.DataXException;
 import com.alibaba.datax.common.plugin.RecordReceiver;
@@ -17,10 +18,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -425,10 +423,10 @@ public class CommonRdbmsWriter {
 
                 case Types.SMALLINT:
                 case Types.INTEGER:
-                case Types.BIGINT:
                 case Types.NUMERIC:
                 case Types.DECIMAL:
                 case Types.FLOAT:
+                //case Types.BIGINT:
                 case Types.REAL:
                 case Types.DOUBLE:
                     String strValue = column.asString();
@@ -440,6 +438,7 @@ public class CommonRdbmsWriter {
                     break;
 
                 //tinyint is a little special in some database like mysql {boolean->tinyint(1)}
+                case Types.BIGINT:
                 case Types.TINYINT:
                     Long longValue = column.asLong();
                     if (null == longValue) {
@@ -491,8 +490,13 @@ public class CommonRdbmsWriter {
 
                 case Types.TIMESTAMP:
                     java.sql.Timestamp sqlTimestamp = null;
+                    utilDate = null;
                     try {
-                        utilDate = column.asDate();
+                        if(column instanceof LongColumn){
+                            sqlTimestamp = new Timestamp(Long.valueOf(column.asLong()));
+                        }else{
+                            utilDate = column.asDate();
+                        }
                     } catch (DataXException e) {
                         throw new SQLException(String.format(
                                 "TIMESTAMP 类型转换错误：[%s]", column));

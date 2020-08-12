@@ -433,7 +433,6 @@ public class HdfsHelper {
         try (ParquetWriter<Group> parquetWriter = parquetUtils.getParquetWriter(schema, fileName, fileSystem.getConf())) {
             Record record;
             while ((record = lineReceiver.getFromReader()) != null) {
-
                 MutablePair<Group, Boolean> transportResult =
                         parquetUtils.transportOneRecord(factory, record, columns, taskPluginCollector);
                 // transportResult.getRight()若为false，则当前这行数据正常

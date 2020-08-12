@@ -276,18 +276,15 @@ public class CommonRdbmsReader {
 
                     case Types.NUMERIC:
                     case Types.DECIMAL:
-                        record.addColumn(new DoubleColumn(rs.getString(i)));
-                        break;
-
                     case Types.FLOAT:
                     case Types.REAL:
                     case Types.DOUBLE:
                         record.addColumn(new DoubleColumn(rs.getString(i)));
-                        break;
+                    break;
 
                     case Types.TIME:
-                        record.addColumn(new DateColumn(rs.getTime(i)));
-                        break;
+                    record.addColumn(new DateColumn(rs.getTime(i)));
+                    break;
 
                     // for mysql bug, see http://bugs.mysql.com/bug.php?id=35115
                     case Types.DATE:
