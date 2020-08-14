@@ -10,10 +10,18 @@ import com.alibaba.datax.common.element.Record;
 public class TerminateRecord implements Record {
 	private final static TerminateRecord SINGLE = new TerminateRecord();
 
+	//统计使用的TerminateRecord个数
+	private static long count = 0;
+
 	private TerminateRecord() {
 	}
 
-	public static TerminateRecord get() {
+	public static long getCount(){
+		return count;
+	}
+
+	public static synchronized TerminateRecord get() {
+		count++;
 		return SINGLE;
 	}
 

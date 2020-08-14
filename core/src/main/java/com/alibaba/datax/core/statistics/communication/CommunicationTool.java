@@ -80,6 +80,13 @@ public final class CommunicationTool {
         return now;
     }
 
+    public static String getWriteReceivedRecordsKey(){
+        return WRITE_RECEIVED_RECORDS;
+    }
+    public static String getWriteSucceedRecordsKey(){
+        return WRITE_SUCCEED_RECORDS;
+    }
+
     public static long getTotalReadRecords(final Communication communication) {
         return communication.getLongCounter(READ_SUCCEED_RECORDS) +
                 communication.getLongCounter(READ_FAILED_RECORDS);

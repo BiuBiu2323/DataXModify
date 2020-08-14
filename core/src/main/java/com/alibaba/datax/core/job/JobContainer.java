@@ -21,6 +21,7 @@ import com.alibaba.datax.core.statistics.communication.CommunicationTool;
 import com.alibaba.datax.core.statistics.container.communicator.AbstractContainerCommunicator;
 import com.alibaba.datax.core.statistics.container.communicator.job.StandAloneJobContainerCommunicator;
 import com.alibaba.datax.core.statistics.plugin.DefaultJobPluginCollector;
+import com.alibaba.datax.core.transport.record.TerminateRecord;
 import com.alibaba.datax.core.util.ErrorRecordChecker;
 import com.alibaba.datax.core.util.FrameworkErrorCode;
 import com.alibaba.datax.core.util.container.ClassLoaderSwapper;
@@ -642,8 +643,6 @@ public class JobContainer extends AbstractContainer {
                     communication.getLongCounter(CommunicationTool.TRANSFORMER_FILTER_RECORDS)
             ));
         }
-
-
     }
 
     /**
@@ -969,7 +968,11 @@ public class JobContainer extends AbstractContainer {
      * 调用外部hook
      */
     private void invokeHooks() {
-        Communication comm = super.getContainerCommunicator().collect();
+        Communication comm = new Communication(super.getContainerCommunicator().collect());
+        comm.getCounter().put(CommunicationTool.getWriteReceivedRecordsKey(),
+                comm.getCounter().get(CommunicationTool.getWriteReceivedRecordsKey()).longValue() - TerminateRecord.getCount());
+        comm.getCounter().put(CommunicationTool.getWriteSucceedRecordsKey(),
+                CommunicationTool.getWriteSucceedRecords(comm));
         HookInvoker invoker = new HookInvoker(CoreConstant.DATAX_HOME + "/hook", configuration, comm.getCounter());
         invoker.invokeAll();
     }

@@ -44,6 +44,19 @@ public class Communication extends BaseObject implements Cloneable {
         this.init();
     }
 
+    public Communication(Communication comm){
+        this.init();
+        for(String key : comm.getCounter().keySet()){
+            this.counter.put(key, comm.getCounter().get(key));
+        }
+        this.state = comm.state;
+        this.throwable = comm.throwable;
+        for(String key : comm.getMessage().keySet()){
+            this.message.put(key, comm.getMessage().get(key));
+        }
+        this.timestamp = comm.timestamp;
+    }
+
     public synchronized void reset() {
         this.init();
     }
