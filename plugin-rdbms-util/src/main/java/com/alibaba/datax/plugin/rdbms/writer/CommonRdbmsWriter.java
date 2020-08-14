@@ -406,9 +406,9 @@ public class CommonRdbmsWriter {
             return preparedStatement;
         }
 
-        protected PreparedStatement fillPreparedStatementColumnType(PreparedStatement preparedStatement, int columnIndex, int columnSqltype, Column column) throws SQLException {
+        protected PreparedStatement fillPreparedStatementColumnType(PreparedStatement preparedStatement, int columnIndex, int writeColumnType, Column column) throws SQLException {
             java.util.Date utilDate;
-            switch (columnSqltype) {
+            switch (writeColumnType) {
                 case Types.CHAR:
                 case Types.NCHAR:
                 case Types.CLOB:
